@@ -18,17 +18,17 @@ import javax.swing.border.TitledBorder;
 		contact = @Contact(
 				name = "Asha Gasimova",
 				email = "asha.gasimova@gmail.com",
-				url = "https://github.com/ashagasimova"
+				url = "https://github.com/ashagasimova/banking-app"
 
 		),
 		license = @License(
 				name = "Asha",
-				url = "https://github.com/ashagasimova"
+				url = "https://github.com/ashagasimova/banking-app"
 		)
 ),
 		externalDocs = @ExternalDocumentation(
 				description = "Backend Rest APIs for Asha bank documentation",
-				url = "https://github.com/ashagasimova"
+				url = "https://github.com/ashagasimova/banking-app"
 		)
 )
 public class BankApplication {

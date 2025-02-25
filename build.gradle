@@ -33,6 +33,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.4.2'
 
+	implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.4'
+
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.5'
 
 

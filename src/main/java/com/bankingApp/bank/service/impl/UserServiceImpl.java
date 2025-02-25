@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final EmailService emailService;
+    private final TransactionService transactionService;
 
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
@@ -129,6 +130,15 @@ public class UserServiceImpl implements UserService {
         userToCredit.setAccountBalance(userToCredit.getAccountBalance().add(creditDebitRequest.getAmount()));
         userRepository.save(userToCredit);
 
+        //Save transaction
+        TransactionDto transactionDto = TransactionDto.builder()
+                .accountNumber(userToCredit.getAccountNumber())
+                .transactionType("Credit")
+                .amount(creditDebitRequest.getAmount())
+                .build();
+
+        transactionService.saveTransaction(transactionDto);
+
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_CREDITED_SUCCESS)
                 .responseMessage(AccountUtils.ACCOUNT_CREDITED_MESSAGE)
@@ -167,6 +177,15 @@ public class UserServiceImpl implements UserService {
         }
         debtToUser.setAccountBalance(debtToUser.getAccountBalance().subtract(creditDebitRequest.getAmount()));
         userRepository.save(debtToUser);
+
+        TransactionDto transactionDto = TransactionDto.builder()
+                .accountNumber(debtToUser.getAccountNumber())
+                .transactionType("Debit")
+                .amount(creditDebitRequest.getAmount())
+                .build();
+
+        transactionService.saveTransaction(transactionDto);
+
         BankResponse response = BankResponse.builder()
                 .responseMessage(AccountUtils.ACCOUNT_DEBITED_MESSAGE)
                 .responseCode(AccountUtils.ACCOUNT_DEBITED_CODE)
@@ -209,6 +228,7 @@ public class UserServiceImpl implements UserService {
         }
         sourceAccount.setAccountBalance(sourceAccount.getAccountBalance().subtract(transferRequest.getAmount()));
         userRepository.save(sourceAccount);
+
         String sourceUserName = sourceAccount.getFirstName() + " " + sourceAccount.getLastName() + " " + sourceAccount.getOtherName();
 //        EmailDetails debitAlert = EmailDetails.builder()
 //                .subject("DEBIT ALERT")
@@ -223,6 +243,14 @@ public class UserServiceImpl implements UserService {
 
         destinationAccount.setAccountBalance(destinationAccount.getAccountBalance().add(transferRequest.getAmount()));
         userRepository.save(destinationAccount);
+
+        TransactionDto transactionDto = TransactionDto.builder()
+                .accountNumber(destinationAccount.getAccountNumber())
+                .transactionType("Debit")
+                .amount(transferRequest.getAmount())
+                .build();
+
+        transactionService.saveTransaction(transactionDto);
 
 //        EmailDetails creditAlert = EmailDetails.builder()
 //                .subject("CREDIT ALERT")
