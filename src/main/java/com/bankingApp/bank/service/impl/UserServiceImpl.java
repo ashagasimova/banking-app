@@ -7,19 +7,27 @@ import com.bankingApp.bank.util.AccountUtils;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 
 @Service
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final EmailService emailService;
-    private final TransactionService transactionService;
+   @Autowired
+   private UserRepository userRepository;
+    @Autowired
+    private  EmailService emailService;
+    @Autowired
+    private  TransactionService transactionService;
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
 
     @Override
     public BankResponse createAccount(UserRequest userRequest) {
@@ -40,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 .stateOfOrigin(userRequest.getStateOfOrigin())
                 .accountNumber(AccountUtils.generateAccountNumber())
                 .email(userRequest.getEmail())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .phoneNumber(userRequest.getPhoneNumber())
                 .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
                 .accountBalance(BigDecimal.ZERO)
@@ -269,4 +278,5 @@ public class UserServiceImpl implements UserService {
 
 
     }
+
 }

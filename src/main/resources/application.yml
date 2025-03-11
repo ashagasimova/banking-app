@@ -21,3 +21,7 @@ server:
           auth: true
           starttls:
             enable: true
+app:
+  jwt:
+    secret: "U1lzKnxtzVzI7eWrNkRrJjvU93N4T2kzD2pJz5iD8dsbGYPJ8uF5F7qG9Xv8QWkm"
+    expiration: 3600
